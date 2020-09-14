@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Personal Expenses App',
-      theme: ThemeData(primarySwatch: Colors.green, accentColor: Colors.amber),
+      theme: ThemeData(primarySwatch: Colors.green, accentColor: Colors.blue),
       home: MyHomePage(),
     );
   }
@@ -43,12 +43,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String txTitle, double txAmount) {
+  void _addNewTransaction(String txTitle, double txAmount, DateTime chosenDate) {
     final newTx = Transaction(
         id: DateTime.now().toString(),
         title: txTitle,
         amount: txAmount,
-        date: DateTime.now());
+        date: chosenDate);
 
     setState(() {
       _userTransactions.add(newTx);
@@ -67,6 +67,13 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
+
+void _deleteTransaction(String id){
+  setState(() {
+    _userTransactions.removeWhere((element) => element.id == id);
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recentTransactions),
-            TransactionList(_userTransactions)
+            TransactionList(_userTransactions, _deleteTransaction)
           ],
         ),
       ),
